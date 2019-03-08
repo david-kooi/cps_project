@@ -10,9 +10,9 @@ TAU_S_MAX = 0.1;
 TAU_H_MAX = 0.1;
 
 % Initial Conditions
-z1    = 1;
-z2    = 1;
-theta = 2;
+z1    = -10;
+z2    = -10;
+theta = pi/4;
 tau_s = 0;
 m_s   = 0;
 tau_h = 0;

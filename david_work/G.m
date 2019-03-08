@@ -24,7 +24,7 @@ m_h_plus   = 0;
 if(tau_s >= TAU_S_MAX)
     % Sample, calculate the control, and save control
     % until hold is ready to receive
-    m_s_plus   = mpc_controller(z);
+    m_s_plus   = mpc_controller2(z);
     tau_s_plus = 0;
     
     m_h_plus   = m_h;
