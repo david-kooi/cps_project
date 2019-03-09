@@ -39,7 +39,7 @@ for k = 1:N
     cost1 = norm(target-x); % Efficiency
 
     objective    = objective + cost1; 
-    %constraints  = [constraints, -1 < u{k} < 1]
+    %constraints  = [constraints, x]]
 
 end
 
