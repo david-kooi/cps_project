@@ -44,7 +44,7 @@ for k = 1:N
 end
 
 ops = sdpsettings('verbose',2);
-optimize(constraints,objective); 
+diagnosis = optimize(constraints,objective); 
 u_out = value(u{1});
 
 
@@ -56,10 +56,9 @@ function next_state = plant_model(x, theta_dot)
     y_pos = x(2);
     theta_sdp = x(3);
 
-    theta_sdp = theta + TAU_S_MAX*theta_dot; 
     z1_next   = x_pos + TAU_S_MAX*V*cos(theta_sdp);
     z2_next   = y_pos + TAU_S_MAX*V*sin(theta_sdp); 
-    
+    theta_sdp = theta + TAU_S_MAX*theta_dot; 
 
     next_state = [z1_next; z2_next; theta_sdp];
 end

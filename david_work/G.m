@@ -15,7 +15,7 @@ m_h     = z(7); % Holder memory
 
 z1_plus    = z1;
 z2_plus    = z2;
-theta_plus = 0;
+theta_plus = theta;
 tau_s_plus = 1;
 m_s_plus   = 0;
 tau_h_plus = 1;

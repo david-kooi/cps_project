@@ -5,14 +5,14 @@ global V;
 global TAU_S_MAX;
 global TAU_H_MAX;
 
-V         = 1;
+V         = 10;
 TAU_S_MAX = 0.1;
 TAU_H_MAX = 0.1;
 
 % Initial Conditions
-z1    = -10;
-z2    = -10;
-theta = pi/4;
+z1    = 0;
+z2    = 0;
+theta = 0;
 tau_s = 0;
 m_s   = 0;
 tau_h = 0;
