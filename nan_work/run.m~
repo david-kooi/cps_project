@@ -62,9 +62,9 @@ xlabel('x (m)');
 ylabel('y (m)');
 grid on
 
-% figure(2)
-% plot(TTC);
-% grid on
+figure(2)
+plot(TTC);
+grid on
 
 
 figure(3);
@@ -72,7 +72,9 @@ xupperlim =18;
 xlowerlim =-2;
 yupperlim = 10;
 ylowerlim = 0;
-ratio = 50;
+xlim([xlowerlim xupperlim]);
+ylim([ylowerlim yupperlim]);
+ratio = 5;
 width= (xupperlim - xlowerlim)*ratio;
 height= (yupperlim - ylowerlim)*ratio;
 left=200;
@@ -80,16 +82,13 @@ bottem=100;
 set(gcf,'position',[left,bottem,width,height])
 for i = 1:N
     [x1, y1] = drawretangle(X(:,i));
-    h1 = plot(x1, y1,'r-');
+    plot(x1, y1,'r-');
     hold on
     [x2, y2] = drawretangle(Xobs(:,i));
-    h2 = plot(x2, y2,'b-');
+    plot(x2, y2,'b-');
 end
 xlabel('x (m)');
 ylabel('y (m)');
-xlim([xlowerlim xupperlim]);
-ylim([ylowerlim yupperlim]);
-legend([h1 h2],'ego-vehicle','guest-vehicle')
 grid on;
     
 
