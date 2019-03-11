@@ -27,7 +27,7 @@ Xtarg = [10, 7.5, 0]';
 v = 1;
 
 %% guest-vehicle state
-Xobs0 = [10; 2.5; 0];
+Xobs0 = [5; 2.5; 0];
 vobs = 0.5;
 
 %% weight of each component in objective function
@@ -62,9 +62,13 @@ xlabel('x (m)');
 ylabel('y (m)');
 grid on
 
-% figure(2)
-% plot(TTC);
-% grid on
+figure(2)
+vector1 = X - Xobs;
+dis = sqrt(vector1(1,:).^2+vector1(2,:).^2);
+plot(0:T/N:T,dis);
+xlabel('time');
+ylabel('distance to obstacle');
+grid on
 
 
 figure(3);

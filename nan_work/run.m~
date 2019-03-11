@@ -27,7 +27,7 @@ Xtarg = [10, 7.5, 0]';
 v = 1;
 
 %% guest-vehicle state
-Xobs0 = [10; 2.5; 0];
+Xobs0 = [5; 2.5; 0];
 vobs = 0.5;
 
 %% weight of each component in objective function
@@ -63,7 +63,10 @@ ylabel('y (m)');
 grid on
 
 figure(2)
-plot(TTC);
+vector1 = X - Xobs;
+dis = sqrt(vector1(1,:).^2+vector1(2,:).^2);
+plot(dis);
+xlabel('Times')
 grid on
 
 
@@ -72,9 +75,7 @@ xupperlim =18;
 xlowerlim =-2;
 yupperlim = 10;
 ylowerlim = 0;
-xlim([xlowerlim xupperlim]);
-ylim([ylowerlim yupperlim]);
-ratio = 5;
+ratio = 50;
 width= (xupperlim - xlowerlim)*ratio;
 height= (yupperlim - ylowerlim)*ratio;
 left=200;
@@ -82,13 +83,16 @@ bottem=100;
 set(gcf,'position',[left,bottem,width,height])
 for i = 1:N
     [x1, y1] = drawretangle(X(:,i));
-    plot(x1, y1,'r-');
+    h1 = plot(x1, y1,'r-');
     hold on
     [x2, y2] = drawretangle(Xobs(:,i));
-    plot(x2, y2,'b-');
+    h2 = plot(x2, y2,'b-');
 end
 xlabel('x (m)');
 ylabel('y (m)');
+xlim([xlowerlim xupperlim]);
+ylim([ylowerlim yupperlim]);
+legend([h1 h2],'ego-vehicle','guest-vehicle')
 grid on;
     
 
