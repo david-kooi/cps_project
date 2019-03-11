@@ -13,6 +13,7 @@ function zdot = F(z)
 %   Copyright @ Hybrid Systems Laboratory (HSL),
 %   Revision: 0.0.0.3 Date: 05/20/2015 3:42:00
 global V;
+global L;
 
 % Definition of state
 z1      = z(1); % X Position
@@ -22,18 +23,23 @@ tau_s   = z(4); % Sampler timer
 m_s     = z(5); % Sampler memory
 tau_h   = z(6); % Holder timer
 m_h     = z(7); % Holder memory
+tar_x   = z(8);
+tar_y   = z(9);
 
 z1_dot     = V*cos(theta);
 z2_dot     = V*sin(theta);
-theta_dot  = m_h;
+theta_dot  = V*tan(m_h)/L;
 tau_s_dot  = 1;
 m_s_dot    = 0;
 tau_h_dot  = 1;
 m_h_dot    = 0;
+tar_x_dot  = V;
+tar_y_dot  = 0;
 
 % Definition of zdot, with constant input
 zdot = [z1_dot; z2_dot; theta_dot;...
         tau_s_dot; m_s_dot;...
-        tau_h_dot; m_h_dot];
+        tau_h_dot; m_h_dot;
+        tar_x_dot; tar_y_dot];
 
 end

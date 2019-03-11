@@ -1,24 +1,29 @@
 clc;
 clear all;
 
-global V;
+global V; % Velocity of vehicle
+global L; % Length of vehicle
 global TAU_S_MAX;
 global TAU_H_MAX;
 
-V         = 1;
+V         = 10;
+L         = 2.65;
 TAU_S_MAX = 0.1;
 TAU_H_MAX = 0.1;
 
 % Initial Conditions
-z1    = -10;
-z2    = -10;
-theta = pi/4;
+z1    = 0;
+z2    = 0;
+theta = 0;
 tau_s = 0;
 m_s   = 0;
 tau_h = 0;
 m_h   = 0;
+tar_x   = 5 
+tar_y   = -5;
 
-z0 = [z1; z2; theta; tau_s; m_s; tau_h; m_h];
+
+z0 = [z1; z2; theta; tau_s; m_s; tau_h; m_h; tar_x; tar_y];
 
 % Global variables
 
