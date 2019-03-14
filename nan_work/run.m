@@ -20,6 +20,7 @@ global vobs;
 global T;
 global l;
 global TTC;
+
 %% ego-vehicle state
 l = 2.65;
 X0 = [0, 2.5, 0]';
@@ -72,6 +73,7 @@ grid on
 
 
 figure(3);
+fontsize = 18;
 xupperlim =18;
 xlowerlim =-2;
 yupperlim = 10;
@@ -84,16 +86,21 @@ bottem=100;
 set(gcf,'position',[left,bottem,width,height])
 for i = 1:N
     [x1, y1] = drawretangle(X(:,i));
-    h1 = plot(x1, y1,'r-');
+    h1 = plot3(x1, y1, ones(1,5)*i/10, 'r-');
     hold on
     [x2, y2] = drawretangle(Xobs(:,i));
-    h2 = plot(x2, y2,'b-');
+    h2 = plot3(x2, y2,ones(1,5)*i/10,'b-');
+    hold on
 end
-xlabel('x (m)');
-ylabel('y (m)');
+plot3(X0(1),X0(2),0,'r*');
+plot3(Xtarg(1),Xtarg(2),T,'b*');
+xlabel('x (m)','fontsize',fontsize);
+ylabel('y (m)','fontsize',fontsize);
+zlabel('t (s)');
 xlim([xlowerlim xupperlim]);
 ylim([ylowerlim yupperlim]);
 legend([h1 h2],'ego-vehicle','guest-vehicle')
+set(gca,'FontSize',fontsize);
 grid on;
     
 
