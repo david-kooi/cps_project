@@ -19,6 +19,7 @@ global T;
 global l;
 global TTC;
 
+
 N = length(u);
 deltaT = T/N;
 X = zeros(3, N + 1);
@@ -55,7 +56,7 @@ vector1 = Xobs - X;
 for i =1:N
     v1 = [v*cos(X(3,i)), v*sin(X(3,i))]*vector1(1:2,i)/norm(vector1(1:2,i));
     v2 = [vobs*cos(Xobs(3,i)), vobs*sin(Xobs(3,i))]*vector1(1:2,i)/norm(vector1(1:2,i));
-    TTC(i) = min(norm(vector1(1:2,i))/(v1-v2),100);
+    TTC(i) = min((norm(vector1(1:2,i)))/(v1-v2),100);
     if (TTC(i)<0)
         TTC(i) = 100;
     end

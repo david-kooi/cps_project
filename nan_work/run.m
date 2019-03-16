@@ -24,32 +24,38 @@ global TTC;
 %% ego-vehicle state
 l = 2.65;
 X0 = [0, 2.5, 0]';
-Xtarg = [10, 7.5, 0]';
+Xtarg = [20, 7.5, 0]';
 v = 1;
 
 %% guest-vehicle state
-Xobs0 = [5; 2.5; 0];
+Xobs0 = [10; 2.5; 0];
 vobs = 0.5;
 
 %% weight of each component in objective function
-w1 = .5;
-w2 = [1, 5, 10];
-w3 = 1;
-w4 = -0.5;
+w1 = .5;%length
+w2 = [1, 10, 20];%last state distance 
+w3 = 1;%smoothness
+w4 = 0;%-0.5;%safety
 
 %% receding time horizon setting
-T = 10;
+T = 20;
 N = 100;
+
+%% memory value
+global mem_TTC;
+mem_TTC = [];
 
 %% main
 A = [];
 b = [];
 Aeq = [];
 beq = [];
-lb = -0.4922 * ones(1, N);
-ub = 0.4922 * ones(1, N);
+lb = -0.5 * ones(1, N);
+ub = 0.5 * ones(1, N);
+nonlcon = [];%@circlecon;
 x0 = rand(1, N);
-u = fmincon(@cost_fun,x0,A,b);
+options = optimoptions('fmincon','Algorithm','sqp','MaxIterations',10000);
+u = fmincon(@cost_fun,x0,A,b,Aeq,beq,lb,ub,nonlcon,options);
 
 %% figure
 figure(1)
@@ -64,9 +70,18 @@ ylabel('y (m)');
 grid on
 
 figure(2)
-vector1 = X - Xobs;
-dis = sqrt(vector1(1,:).^2+vector1(2,:).^2);
-plot(0:T/N:T,dis);
+% vector1 = X - Xobs;
+% dis = sqrt(vector1(1,:).^2+vector1(2,:).^2);
+vector1 = Xobs - X;
+for i =1:N
+    v1 = [v*cos(X(3,i)), v*sin(X(3,i))]*vector1(1:2,i)/norm(vector1(1:2,i));
+    v2 = [vobs*cos(Xobs(3,i)), vobs*sin(Xobs(3,i))]*vector1(1:2,i)/norm(vector1(1:2,i));
+    TTC(i) = min((norm(vector1(1:2,i)))/(v1-v2),100);
+    if (TTC(i)<0)
+        TTC(i) = 100;
+    end
+ end
+plot(1:N,TTC);
 xlabel('time');
 ylabel('distance to obstacle');
 grid on
@@ -74,7 +89,7 @@ grid on
 
 figure(3);
 fontsize = 18;
-xupperlim =18;
+xupperlim =25;
 xlowerlim =-2;
 yupperlim = 10;
 ylowerlim = 0;
