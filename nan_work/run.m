@@ -24,7 +24,7 @@ global TTC;
 %% ego-vehicle state
 l = 2.65;
 X0 = [0, 2.5, 0]';
-Xtarg = [20, 7.5, 0]';
+Xtarg = [20, 4.5, 0]';
 v = 1;
 
 %% guest-vehicle state
@@ -52,7 +52,7 @@ Aeq = [];
 beq = [];
 lb = -0.5 * ones(1, N);
 ub = 0.5 * ones(1, N);
-nonlcon = [];%@circlecon;
+nonlcon = @circlecon;
 x0 = rand(1, N);
 options = optimoptions('fmincon','Algorithm','sqp','MaxIterations',10000);
 u = fmincon(@cost_fun,x0,A,b,Aeq,beq,lb,ub,nonlcon,options);
@@ -101,10 +101,10 @@ bottem=100;
 set(gcf,'position',[left,bottem,width,height])
 for i = 1:N
     [x1, y1] = drawretangle(X(:,i));
-    h1 = plot3(x1, y1, ones(1,5)*i/10, 'r-');
+    h1 = plot3(x1, y1, ones(1,5)*i/T, 'r-');
     hold on
     [x2, y2] = drawretangle(Xobs(:,i));
-    h2 = plot3(x2, y2,ones(1,5)*i/10,'b-');
+    h2 = plot3(x2, y2,ones(1,5)*i/T,'b-');
     hold on
 end
 plot3(X0(1),X0(2),0,'r*');
