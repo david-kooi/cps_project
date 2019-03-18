@@ -1,7 +1,47 @@
-function [c,ceq] = circlecon(x)
 
-c = (x(1)-1/3)^2 + (x(2)-1/3)^2 - (1/3)^2;
+% Copyright 2015 The MathWorks, Inc.
 
+function [c,ceq] = circlecon(u)
+
+global X0;
+global Xtarg;
+global X;
+global v;
+
+global Xobs;
+global Xobs0;
+global vobs;
+
+global T;
+global l;
+global TTC;
+
+N = length(u);
+deltaT = T/N;
+X = zeros(3, N + 1);
+X(:,1) = X0;
+
+for i = 1:N
+    X(:,i+1) = [v*cos(X(3,i))*deltaT; v*sin(X(3,i))*deltaT; v*deltaT*tan(u(i))/l]+X(:,i);
+end
+
+Xobs = zeros(3,N+1);
+Xobs(:,1) = Xobs0;
+TTC = zeros(1,N);
+for i = 1:N
+    Xobs(:,i+1) = [vobs*cos(Xobs(3,i))*deltaT; vobs*sin(Xobs(3,i))*deltaT; vobs*deltaT*tan(0)/l]+Xobs(:,i);
+end
+
+vector1 = Xobs - X;
+for i =1:N
+    v1 = [v*cos(X(3,i)), v*sin(X(3,i))]*vector1(1:2,i)/norm(vector1(1:2,i));
+    v2 = [vobs*cos(Xobs(3,i)), vobs*sin(Xobs(3,i))]*vector1(1:2,i)/norm(vector1(1:2,i));
+    TTC(i) = min((norm(vector1(1:2,i)))/(v1-v2),100);
+    if (TTC(i)<0)
+        TTC(i) = 100;
+    end
+end
+ 
+c = 9 - min(TTC);
 
 ceq = [];
-
