@@ -15,6 +15,8 @@ global vobs;
 global T;
 global l;
 global TTC;
+c = [];
+
 
 N = length(u);
 deltaT = T/N;
@@ -40,8 +42,10 @@ for i =1:N
     if (TTC(i)<0)
         TTC(i) = 100;
     end
+    
+    c = [c (15 - TTC(i))];
 end
  
-c = 9 - min(TTC);
+%c = [c (15 - min(TTC))];
 
 ceq = [];

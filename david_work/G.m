@@ -1,5 +1,5 @@
 function zplus = G(z)
-
+global u_list;
 global TAU_S_MAX;
 global TAU_H_MAX;
 
@@ -28,8 +28,10 @@ tar_y_plus = tar_y;
 if(tau_s >= TAU_S_MAX)
     % Sample, calculate the control, and save control
     % until hold is ready to receive
-    m_s_plus   = mpc_controller2(z);
+    m_s_plus   = mpc_controller3(z);
     tau_s_plus = 0;
+    
+    u_list = [u_list m_s_plus];
     
     m_h_plus   = m_h;
     tau_h_plus = tau_h;

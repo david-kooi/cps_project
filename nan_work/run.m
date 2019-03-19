@@ -24,7 +24,7 @@ global TTC;
 %% ego-vehicle state
 l = 2.65;
 X0 = [0, 2.5, 0]';
-Xtarg = [20, 4.5, 0]';
+Xtarg = [20, 5, 0]';
 v = 1;
 
 %% guest-vehicle state
@@ -35,7 +35,7 @@ vobs = 0.5;
 w1 = .5;%length
 w2 = [1, 10, 20];%last state distance 
 w3 = 1;%smoothness
-w4 = 0;%-0.5;%safety
+w4 = -0.5;%safety
 
 %% receding time horizon setting
 T = 20;
@@ -52,7 +52,7 @@ Aeq = [];
 beq = [];
 lb = -0.5 * ones(1, N);
 ub = 0.5 * ones(1, N);
-nonlcon = @circlecon;
+nonlcon = [];%@circlecon;
 x0 = rand(1, N);
 options = optimoptions('fmincon','Algorithm','sqp','MaxIterations',10000);
 u = fmincon(@cost_fun,x0,A,b,Aeq,beq,lb,ub,nonlcon,options);
@@ -82,8 +82,8 @@ for i =1:N
     end
  end
 plot(1:N,TTC);
-xlabel('time');
-ylabel('distance to obstacle');
+xlabel('time(s)');
+ylabel('Time To Collision');
 grid on
 
 

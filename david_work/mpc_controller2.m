@@ -3,8 +3,10 @@
 % control sequence that minimizes the objective function.
 % Apply the 1st control 
 %%
-function u_out = mpc_controller(z)
+function u_out = mpc_controller2(z)
 global TAU_S_MAX;
+global V;
+
 
 % Definition of state
 z1      = z(1); % X Position
@@ -35,35 +37,46 @@ traj_x      = [];
 constraints = [];
 objective   = 0;
 
+
 % Create objective function
 for k = 1:N 
+     
     x = plant_model(x, u{k}); % Update x
+ 
+    % Create TTC STL Constraints
+    TTC = 1;
+    obs_x = 3;
+    obs_y = 0;
+    phi   = sdpvar(1,1);
+    
+    plant_pos = [x(1); x(2)];
+    obs_pos  = [obs_x;obs_y];
+    d         = plant_pos - obs_pos;
+    plant_v   = [V*cos(x(3)); V*sin(x(3))];
+    obs_v    = [0; 0];
+    plant_vp  = ((plant_v' * d) * d) / norm(d);
+    obs_vp   = (obs_v' * d) / norm(d);
 
-    cost0 = sqrt(x(1)^2 + x(2)^2) % Path length 
+    TTC_act = norm(d) / norm((plant_vp)); 
+    
+    
+    constraints  = [constraints ];
+
+
     cost1 = norm(TARGET-x);       % Distance to target 
-
-    traj_x = [traj_x x];
-
     objective  = objective + cost1; 
-    %constraints  = [constraints, x]]
+    traj_x = [traj_x x];
+    
+
 
 end
 
-
-dx    = diff(traj_x')'/TAU_S_MAX;
-ddx   = diff(dx')'/TAU_S_MAX;
-dddx  = diff(ddx')'/TAU_S_MAX;
-cost3 = max(sqrt(dddx.^2)+sqrt(dddx.^2)); 
-
-%objective = objective + cost3;
-
 ops = sdpsettings('verbose',2);
-optimize(constraints,objective); 
+u = optimize(constraints,objective);
 u_out = value(u{1});
 
 
 function next_state = plant_model(x, theta_dot)
-    global V;
     global L;
 
     x_pos = x(1);
