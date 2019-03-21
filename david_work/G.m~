@@ -23,7 +23,7 @@ z1_plus    = z1;
 z2_plus    = z2;
 theta_plus = theta;
 tau_s_plus = 1;
-m_s_plus   = 0;
+m_s_plus   = zeros(length(z),1);
 tau_h_plus = 1;
 m_h_plus   = 0;
 tar_x_plus = tar_x;
@@ -34,19 +34,18 @@ obs_theta_plus = obs_theta;
 
 if(tau_s >= TAU_S_MAX)
     % Sample state
-    m_s_plus   = 0;%z;%mpc_controller4(z);
+    m_s_plus   = z;%mpc_controller4(z);
     tau_s_plus = 0;
     
-
+    u_list = [u_list m_s_plus];
     
     m_h_plus   = m_h;
     tau_h_plus = tau_h;
 elseif(tau_h >= TAU_H_MAX)
     % Apply saved state
-    m_h_plus   = mpc_controller4(z);
+    m_h_plus   = mpc_controller(m_s);
     tau_h_plus = 0;
     
-    u_list = [u_list m_h_plus];
     m_s_plus   = m_s;
     tau_s_plus = tau_s;  
 end
