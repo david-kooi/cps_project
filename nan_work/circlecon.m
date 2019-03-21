@@ -15,6 +15,8 @@ global vobs;
 global T;
 global l;
 global TTC;
+c = [];
+
 
 N = length(u);
 deltaT = T/N;
@@ -52,5 +54,8 @@ end
 %     c(i+N) = 0.05 - abs(diff_u(i));
 % end
 
-
 ceq = [];
+end
+ 
+%c = [c (15 - min(TTC))];
+

@@ -96,6 +96,8 @@ subplot(2,2,3)
 plot((1:N)/N*T,u,'g-')
 hold on
 stem((1:N-1)/N*T,diff(u),'b-')
+xlabel('time(s)');
+ylabel('Time To Collision');
 grid on
 
 

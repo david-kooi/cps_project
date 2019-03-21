@@ -37,11 +37,11 @@ obs_y   = 2.5;
 obs_theta = 0;
 
 
-z0 = [z1; z2; theta; tau_s; m_s; tau_h; m_h; tar_x; tar_y; obs_x; obs_y; obs_theta;];
+z0 = [z1; z2; theta; tau_s; m_s; tau_h; m_h; tar_x; tar_y; obs_x; obs_y; obs_theta];
 
 
 % simulation horizon
-TSPAN=[0 40];
+TSPAN=[0 20];
 JSPAN = [0 10000000000000];
 
 rule = 1;
@@ -58,34 +58,39 @@ z0,TSPAN,JSPAN,rule,options,"ode23t");
  plot(z(:,8),z(:,9)); % Reference
  plot(z(:,10),z(:,11)); % Guest-Vehicle
  
-
-figure(3);
-fontsize = 18;
-xupperlim =25;
-xlowerlim =-2;
-yupperlim = 10;
-ylowerlim = 0;
-ratio = 50;
-width= (xupperlim - xlowerlim)*ratio;
-height= (yupperlim - ylowerlim)*ratio;
-left=200;
-bottem=100;
-set(gcf,'position',[left,bottem,width,height])
-
  
-for i = 1:1000:size(z,1)
-    [x1, y1] = drawrectangle([z(i,1),z(i,2),z(i,3)]);
-    h1 = plot3(x1, y1, ones(1,5)*i/TAU_S_MAX, 'r-');
+for i = 1:length(z(1:,)
+    [x1, y1] = drawretangle([z(i:,1),z(i:,2),z(i:,3)];
+    %h1 = plot3(x1, y1, ones(1,5)*i/T, 'r-');
     hold on
-    [x2, y2] = drawrectangle([z(i,10), z(i,11),0]);
-    h2 = plot3(x2, y2,ones(1,5)*i/TAU_S_MAX,'b-');
+    [x2, y2] = drawretangle([z(i:,10), z(i:,11)]);
+    %h2 = plot3(x2, y2,ones(1,5)*i/T,'b-');
     hold on
 end
 
 
 
 
+function [X, Y] = drawretangle(x)
 
+    %DRAWRETANGLE Summary of this function goes here
+    %   Detailed explanation goes here
+    alpha = 30/180*pi;
+    beta = 30/180*pi;
+    a = 2;
+    b = 2;
+    x_ret(1) = a*cos(x(3)-alpha) + x(1);
+    x_ret(2) = a*cos(x(3)+alpha) + x(1);
+    x_ret(3) = -b*cos(x(3)-beta) + x(1);
+    x_ret(4) = -b*cos(x(3)+beta) + x(1);
+    y_ret(1) = b*sin(x(3)-alpha) + x(2);
+    y_ret(2) = b*sin(x(3)+alpha) + x(2);
+    y_ret(3) = -b*sin(x(3)-beta) + x(2);
+    y_ret(4) = -b*sin(x(3)+beta) + x(2);
+    X = [x_ret x_ret(1)]';
+    Y = [y_ret y_ret(1)]';
+
+end
 
 % 
 % 
