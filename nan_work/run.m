@@ -30,7 +30,7 @@ Xtarg = [20, 7.5, 0]';
 v = 1;
 
 %% guest-vehicle state
-Xobs0 = [15; 2.5; 0];
+Xobs0 = [10; 2.5; 0];
 vobs = 0.5;
 
 %% weight of each component in objective function
@@ -42,7 +42,7 @@ w5 = 1;
 w6 = 5;
 %% receding time horizon setting
 T = 20;
-N = 100;
+N = 50;
 
 %% memory value
 global mem_TTC;
@@ -93,7 +93,7 @@ grid on
 
 figure(1)
 subplot(2,2,3)
-plot((1:N)/N*T,u,'g-')
+stairs((1:N)/N*T,u,'g-')
 hold on
 stem((1:N-1)/N*T,diff(u),'b-')
 xlabel('time(s)');

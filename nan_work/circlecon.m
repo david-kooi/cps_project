@@ -45,7 +45,7 @@ for i =1:N
     if (TTC(i)<0)
         TTC(i) = 100;
     end
-    c(i) = 10 - TTC(i);
+    c(i) = 18 - TTC(i);
 end
 
 % diff_u = zeros(N-1,1);
