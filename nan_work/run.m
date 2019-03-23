@@ -23,6 +23,8 @@ global T;
 global l;
 global TTC;
 
+mark = 2;
+weight_mark = 0;
 %% ego-vehicle state
 l = 2.65;
 X0 = [0, 2.5, 0]';
@@ -30,7 +32,7 @@ Xtarg = [20, 7.5, 0]';
 v = 1;
 
 %% guest-vehicle state
-Xobs0 = [10; 2.5; 0];
+Xobs0 = [15; 2.5; 0];
 vobs = 0.5;
 
 %% weight of each component in objective function
@@ -56,25 +58,60 @@ beq = [];
 lb = -0.5 * ones(1, N);
 ub = 0.5 * ones(1, N);
 nonlcon = @circlecon;
+%nonlcon = [];
 x0 = zeros(1, N);
 options = optimoptions('fmincon','Algorithm','sqp','MaxIterations',10000);
 u = fmincon(@cost_fun,x0,A,b,Aeq,beq,lb,ub,nonlcon,options);
 
 %% figure
-figure(1)
-subplot(2,2,1)
-plot([X0(1) X(1,:) Xtarg(1)],[X0(2) X(2,:) Xtarg(2)],'r*');
-hold on
-plot(Xobs(1,:),Xobs(2,:),'b*');
-hold on
-plot(X0(1),X0(2),'r*');
-plot(Xtarg(1),Xtarg(2),'b*');
-xlabel('x (m)');
-ylabel('y (m)');
-grid on
+fontsize = 28;
 
 figure(1)
-subplot(2,2,2)
+%subplot(2,2,1)
+% plot([X0(1) X(1,:) Xtarg(1)],[X0(2) X(2,:) Xtarg(2)],'r*');
+% hold on
+% plot(Xobs(1,:),Xobs(2,:),'b*');
+% hold on
+% plot(X0(1),X0(2),'r*');
+% plot(Xtarg(1),Xtarg(2),'b*');
+% xlabel('x (m)','fontsize',fontsize);
+% ylabel('y (m)','fontsize',fontsize);
+% set(gca,'FontSize',fontsize);
+% grid on
+
+xupperlim =25;
+xlowerlim =-2;
+yupperlim = 10;
+ylowerlim = 0;
+ratio = 50;
+width= (xupperlim - xlowerlim)*ratio;
+height= (yupperlim - ylowerlim)*ratio;
+left=200;
+bottem=100;
+set(gcf,'position',[left,bottem,width,height])
+for i = 1:N
+    [x1, y1] = drawretangle(X(:,i));
+    h1 = plot(x1, y1, 'r-');
+    hold on
+    [x2, y2] = drawretangle(Xobs(:,i));
+    h2 = plot(x2, y2,'b-');
+    hold on
+end
+plot(X0(1),X0(2),'r*');
+plot(Xtarg(1),Xtarg(2),'b*');
+xlabel('x (m)','fontsize',fontsize);
+ylabel('y (m)','fontsize',fontsize);
+xlim([xlowerlim xupperlim]);
+ylim([ylowerlim yupperlim]);
+legend([h1 h2],'ego-vehicle','guest-vehicle')
+set(gca,'FontSize',fontsize);
+grid on;
+
+
+% figure(1)
+% subplot(2,2,2)
+figure(2)
+fontsize = 18;
 % vector1 = X - Xobs;
 % dis = sqrt(vector1(1,:).^2+vector1(2,:).^2);
 vector1 = Xobs - X;
@@ -87,22 +124,28 @@ for i =1:N
     end
  end
 plot(1:N,TTC);
-xlabel('time');
-ylabel('Time to Collision');
+xlabel('time (s)','fontsize',fontsize);
+ylabel('Time to Collision (s)','fontsize',fontsize);
+set(gca,'FontSize',fontsize);
 grid on
 
-figure(1)
-subplot(2,2,3)
-stairs((1:N)/N*T,u,'g-')
-hold on
-stem((1:N-1)/N*T,diff(u),'b-')
-xlabel('time(s)');
-ylabel('Time To Collision');
+% figure(1)
+% subplot(2,2,3)
+fontsize = 18;
+figure(3)
+stairs((1:N)/N*T,u,'b-')
+%hold on
+%stem((1:N-1)/N*T,diff(u),'b-')
+xlabel('time (s)','fontsize',fontsize);
+ylabel('Front wheel angle','fontsize',fontsize);
+set(gca,'FontSize',fontsize);
 grid on
 
 
-figure(1)
-subplot(2,2,4)
+% figure(1)
+% subplot(2,2,4)
+figure(4)
+fontsize = 18;
 h1 = plot((1:N)/N*T,X(1,2:N+1),'g*');
 hold on
 h2 = plot((1:N)/N*T,X(2,2:N+1),'b*');
@@ -110,10 +153,13 @@ hold on
 h3 = plot((1:N)/N*T,X(3,2:N+1),'r*');
 hold on
 legend([h1 h2 h3],'X','Y','Heading')
+set(gca,'FontSize',fontsize);
 grid on
+% 
+% figure(2);
+fontsize = 28;
+figure(5)
 
-figure(3);
-fontsize = 18;
 xupperlim =25;
 xlowerlim =-2;
 yupperlim = 10;
@@ -136,7 +182,7 @@ plot3(X0(1),X0(2),0,'r*');
 plot3(Xtarg(1),Xtarg(2),T,'b*');
 xlabel('x (m)','fontsize',fontsize);
 ylabel('y (m)','fontsize',fontsize);
-zlabel('t (s)');
+zlabel('time (s)');
 xlim([xlowerlim xupperlim]);
 ylim([ylowerlim yupperlim]);
 legend([h1 h2],'ego-vehicle','guest-vehicle')
@@ -144,7 +190,11 @@ set(gca,'FontSize',fontsize);
 grid on;
     
 
-
+saveas(1,['EX' mat2str(mark) '_weight_' mat2str(weight_mark) '_trajectory.jpg']);
+saveas(2,['EX' mat2str(mark) '_weight_' mat2str(weight_mark) '_Time_to_Collision.jpg']);
+saveas(3,['EX' mat2str(mark) '_weight_' mat2str(weight_mark) '_Front_Wheel_Angle.jpg']);
+saveas(4,['EX' mat2str(mark) '_weight_' mat2str(weight_mark) '_state.jpg']);
+saveas(5,['EX' mat2str(mark) '_weight_' mat2str(weight_mark) '_trajectory3D.jpg']);
 
     
 
